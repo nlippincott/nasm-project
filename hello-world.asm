@@ -1,26 +1,25 @@
-; Hello World in NASM assembly
+; Hello World in NASM assembly with C Library
 
-global _start           ; expose program entry point
+global main             ; expose program entry point
+extern printf           ; declare external function
 
 section .text           ; start of code segment
 
-_start:
+main:
+    push rbp                ; preserve base pointer
+    mov rbp,rsp             ; copy stack pointer
 
     ; Write "Hello World!" to the console
-    mov rax,1               ; system call for write 
-    mov rdi,1               ; file handle for stdout
-    mov rsi,hello_str       ; address of output string
-    mov rdx,hello_str_len   ; size of output string 
-    syscall                 ; invoke operating system call 
+    mov rdi,hello_str       ; address of printf format string
+    xor rax,rax             ; clear RAX for call to printf
+    call printf             ; call printf (from C library)
 
-    ; End the program
-    mov rax,0x3c            ; system call for exit 
-    xor rdi,rdi             ; exit code 0
-    syscall                 ; invoke operating system call 
+    pop rbp                 ; restore base pointer
+    xor rax,rax             ; exit status 0
+    ret                     ; exit main function
 
 section .data           ; start of initialized data segment
 
-    hello_str db "Hello World!",0xa     ; output string with newline
-    hello_str_len equ $-hello_str       ; size of output string 
+    hello_str db "Hello World!",0xa,0   ; null-terminated output string
 
 section .bss            ; start of uninitialized data segment 
