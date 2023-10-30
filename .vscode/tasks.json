@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "nasm: Assemble/link active file",
+            "command": "nasm -felf64 -g -Fdwarf -o ${fileBasenameNoExtension}.o ${fileBasename}; ld -g ${fileBasenameNoExtension}.o; rm ${fileBasenameNoExtension}.o",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "pattern": { "regexp": "error" }
+            },
+            "group": {
+                "isDefault": true,
+                "kind": "build"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "nasmc: Assemble/link active file w/ C library",
+            "command": "nasm -felf64 -g -Fdwarf -o ${fileBasenameNoExtension}.o ${fileBasename}; gcc -g -no-pie ${fileBasenameNoExtension}.o; rm ${fileBasenameNoExtension}.o",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "pattern": { "regexp": "error" }
+            },
+            "group": {
+                "isDefault": true,
+                "kind": "build"
+            }
+        }
+    ]
+}
